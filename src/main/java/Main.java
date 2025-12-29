@@ -23,7 +23,7 @@ public class Main {
 
         // сохранение модели
         System.out.println("\nSaving model...");
-        ObjWriter.write(model, "output_model.obj");
+        ObjWriter.saveModel(model, "output_model.obj");
         System.out.println("Model saved as 'output_model.obj'");
     }
 }

@@ -41,7 +41,7 @@ class ObjWriterTest {
         poly.setNormalIndices(new ArrayList<>(Arrays.asList(0, 0, 0)));
         model.polygons.add(poly);
 
-        ObjWriter.write(model, "test_full.obj");
+        ObjWriter.saveModel(model, "test_full.obj");
         String content = Files.readString(Path.of("test_full.obj"));
 
         assertTrue(content.contains("f 1/1/1 2/2/1 3/3/1"));
@@ -66,7 +66,7 @@ class ObjWriterTest {
         poly.setVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2)));
         model.polygons.add(poly);
 
-        ObjWriter.write(model, "test_vertex_only.obj");
+        ObjWriter.saveModel(model, "test_vertex_only.obj");
         String content = Files.readString(Path.of("test_vertex_only.obj"));
 
         assertTrue(content.contains("f 1 2 3"));
@@ -96,7 +96,7 @@ class ObjWriterTest {
         poly.setTextureVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2)));
         model.polygons.add(poly);
 
-        ObjWriter.write(model, "test_texture_only.obj");
+        ObjWriter.saveModel(model, "test_texture_only.obj");
         String content = Files.readString(Path.of("test_texture_only.obj"));
 
         assertTrue(content.contains("f 1/1 2/2 3/3"));
@@ -122,7 +122,7 @@ class ObjWriterTest {
         poly.setNormalIndices(new ArrayList<>(Arrays.asList(0, 0, 0)));
         model.polygons.add(poly);
 
-        ObjWriter.write(model, "test_normal_only.obj");
+        ObjWriter.saveModel(model, "test_normal_only.obj");
         String content = Files.readString(Path.of("test_normal_only.obj"));
 
         assertTrue(content.contains("f 1//1 2//1 3//1"));
@@ -132,7 +132,7 @@ class ObjWriterTest {
     void testNullModel() {
         // Проверка обработки null модели
         Exception exception = assertThrows(IOException.class, () -> {
-            ObjWriter.write(null, "test_null.obj");
+            ObjWriter.saveModel(null, "test_null.obj");
         });
         assertEquals("Model doesn't exist!", exception.getMessage());
     }
@@ -159,7 +159,7 @@ class ObjWriterTest {
         model.polygons.add(poly);
 
         Exception exception = assertThrows(IOException.class, () -> {
-            ObjWriter.write(model, "test_wrong_texture.obj");
+            ObjWriter.saveModel(model, "test_wrong_texture.obj");
         });
 
         assertTrue(exception.getMessage().contains("doesn't match"));
@@ -170,7 +170,7 @@ class ObjWriterTest {
         // Пустая модель (нет вершин, текстур, нормалей, полигонов)
         // Проверяет, что код корректно обрабатывает пустые данные
         Model model = new Model();
-        ObjWriter.write(model, "test_empty.obj");
+        ObjWriter.saveModel(model, "test_empty.obj");
 
         assertTrue(Files.exists(Path.of("test_empty.obj")));
         String content = Files.readString(Path.of("test_empty.obj"));
