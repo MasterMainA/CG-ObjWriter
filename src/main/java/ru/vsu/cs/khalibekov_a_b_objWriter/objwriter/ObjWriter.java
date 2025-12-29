@@ -14,15 +14,15 @@ public class ObjWriter {
 
     public static void write(Model model, String filename) throws IOException {
         if (model == null) {
-            throw new IOException("Модель не существует!");
+            throw new IOException("Model doesn't exist!");
         }
 
         try (FileWriter writer = new FileWriter(filename)) {
-            writer.write("# Экспортировано ObjWriter\n");
-            writer.write("# Вершин: " + model.vertices.size() + "\n");
-            writer.write("# Текстурных координат: " + model.textureVertices.size() + "\n");
-            writer.write("# Нормалей: " + model.normals.size() + "\n");
-            writer.write("# Полигонов: " + model.polygons.size() + "\n\n");
+            writer.write("# Created by ObjWriter\n");
+            writer.write("# Vertices: " + model.vertices.size() + "\n");
+            writer.write("# Texture coordinates: " + model.textureVertices.size() + "\n");
+            writer.write("# Normals: " + model.normals.size() + "\n");
+            writer.write("# Polygons: " + model.polygons.size() + "\n\n");
 
             // запись вершин
             for (Vector3f vertex : model.vertices) {
@@ -53,7 +53,7 @@ public class ObjWriter {
                 Polygon poly = model.polygons.get(polyIndex);
 
                 if (poly == null) {
-                    throw new IOException("Полигон " + polyIndex + " равен null");
+                    throw new IOException("Polygon " + polyIndex + " is null");
                 }
 
                 ArrayList<Integer> vertexIndices = poly.getVertexIndices();
@@ -61,7 +61,7 @@ public class ObjWriter {
                 ArrayList<Integer> normalIndices = poly.getNormalIndices();
 
                 if (vertexIndices == null || vertexIndices.isEmpty()) {
-                    throw new IOException("Полигон " + polyIndex + " не содержит вершин");
+                    throw new IOException("Polygon " + polyIndex + " doesn't contain vertices");
                 }
 
                 // проверка согласованности индексов
@@ -108,7 +108,7 @@ public class ObjWriter {
         }
     }
 
-     // Проверка согласованности индексов в полигоне
+    // Проверка согласованности индексов в полигоне
     private static void checkPolygonConsistency(int polyIndex,
                                                 ArrayList<Integer> vertexIndices,
                                                 ArrayList<Integer> textureIndices,
@@ -116,17 +116,17 @@ public class ObjWriter {
         int vertexCount = vertexIndices.size();
 
         if (textureIndices != null && !textureIndices.isEmpty() && textureIndices.size() != vertexCount) {
-            throw new IOException("Полигон " + polyIndex + ": количество текстурных индексов (" +
-                    textureIndices.size() + ") не совпадает с количеством вершин (" + vertexCount + ")");
+            throw new IOException("Polygon " + polyIndex + ": texture indices count (" +
+                    textureIndices.size() + ") doesn't match vertices count (" + vertexCount + ")");
         }
 
         if (normalIndices != null && !normalIndices.isEmpty() && normalIndices.size() != vertexCount) {
-            throw new IOException("Полигон " + polyIndex + ": количество нормалей (" +
-                    normalIndices.size() + ") не совпадает с количеством вершин (" + vertexCount + ")");
+            throw new IOException("Polygon " + polyIndex + ": normals count (" +
+                    normalIndices.size() + ") doesn't match vertices count (" + vertexCount + ")");
         }
     }
 
-     // проверка границ индексов
+    // проверка границ индексов
     private static void checkIndicesBounds(int polyIndex,
                                            ArrayList<Integer> vertexIndices,
                                            ArrayList<Integer> textureIndices,
@@ -136,8 +136,8 @@ public class ObjWriter {
         for (int i = 0; i < vertexIndices.size(); i++) {
             int index = vertexIndices.get(i);
             if (index < 0 || index >= maxVertices) {
-                throw new IOException("Полигон " + polyIndex + ", вершина " + i +
-                        ": индекс " + index + " выходит за границы [0, " + (maxVertices-1) + "]");
+                throw new IOException("Polygon " + polyIndex + ", vertex " + i +
+                        ": index " + index + " is out of bounds [0, " + (maxVertices-1) + "]");
             }
         }
 
@@ -146,8 +146,8 @@ public class ObjWriter {
             for (int i = 0; i < textureIndices.size(); i++) {
                 int index = textureIndices.get(i);
                 if (index < 0 || index >= maxTextures) {
-                    throw new IOException("Полигон " + polyIndex + ", текстура " + i +
-                            ": индекс " + index + " выходит за границы [0, " + (maxTextures-1) + "]");
+                    throw new IOException("Polygon " + polyIndex + ", texture " + i +
+                            ": index " + index + " is out of bounds [0, " + (maxTextures-1) + "]");
                 }
             }
         }
@@ -157,8 +157,8 @@ public class ObjWriter {
             for (int i = 0; i < normalIndices.size(); i++) {
                 int index = normalIndices.get(i);
                 if (index < 0 || index >= maxNormals) {
-                    throw new IOException("Полигон " + polyIndex + ", нормаль " + i +
-                            ": индекс " + index + " выходит за границы [0, " + (maxNormals-1) + "]");
+                    throw new IOException("Polygon " + polyIndex + ", normal " + i +
+                            ": index " + index + " is out of bounds [0, " + (maxNormals-1) + "]");
                 }
             }
         }
